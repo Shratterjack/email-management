@@ -1,3 +1,6 @@
 /venv
 /token.pickle
 /credentials.json
+/localhost.env
+.vscode/launch.json
+.vscode/settings.json
