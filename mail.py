@@ -56,12 +56,16 @@ class Mail:
         if exception is None:
             final_data = {}
             senderArray = [inner for inner in response['payload']['headers'] if inner['name'] == "From"]
-            subjectArray = [inner for inner in response['payload']['headers'] if inner['name'] == "Subject"]
+            subjectArray = [inner for inner in response['payload']['headers'] if (inner['name'] == "Subject" or inner['name'] == "subject")]
             sender = self.extractSenderMail(senderArray[0]['value'])
             final_data['id'] = response['id']
             final_data['threadId'] = response['threadId']
             final_data['labelIds'] = response['labelIds']
-            final_data['subject'] =  self.cleanTextValue(subjectArray[0]['value'])
+            if len(subjectArray) != 0:
+                final_data['subject'] =  self.cleanTextValue(subjectArray[0]['value'])
+            else:
+                final_data['subject'] = ''
+
             final_data['senderName'] = self.cleanTextValue(sender['name'])
             final_data['senderId'] = sender['emailId']
             final_data['snippet'] = self.cleanTextValue(response['snippet'])
@@ -92,7 +96,7 @@ class Mail:
         data = []
         messages = self.getMessages()
         messageCount = len(messages)
-        i = 0
+        i = 71802
         service = self.conn[0]
         batch = service.new_batch_http_request(callback=self.ingestData)
         while i < messageCount:
